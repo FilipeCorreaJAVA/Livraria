@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/pages/modelo.xhtml">
+
+	<ui:define name="conteudo">
+
+	<h:form id="formListagem">
+		<p:panel header="Clientes - Listagem">
+			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
+				paginator="true" value="#{clienteBean.clientes}" var="cliente"
+				rows="10">
+				<f:facet name="header">
+
+					<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+						actionListener="#{clienteBean.novo}" update=":formCadastro:painel" />
+
+				</f:facet>
+
+				<p:column headerText="Nome" sortBy="#{cliente.nome}">
+					<h:outputText value="#{cliente.nome}" />
+				</p:column>
+
+				<p:column headerText="RG" sortBy="#{cliente.rg}">
+					<h:outputText value="#{cliente.rg}" />
+				</p:column>
+
+				<p:column headerText="CPF" sortBy="#{cliente.cpf}">
+					<h:outputText value="#{cliente.cpf}" />
+				</p:column>
+
+
+				<p:column headerText="Rua" sortBy="#{cliente.rua}">
+					<h:outputText value="#{cliente.rua}" />
+				</p:column>
+
+				<p:column headerText="Nº" sortBy="#{cliente.numero}">
+					<h:outputText value="#{cliente.numero}" />
+				</p:column>
+
+				<p:column headerText="Bairro" sortBy="#{cliente.bairro}">
+					<h:outputText value="#{cliente.bairro}" />
+				</p:column>
+
+				<p:column headerText="CEP" sortBy="#{cliente.cep}">
+					<h:outputText value="#{cliente.cep}" />
+				</p:column>
+
+				<p:column headerText="Comp." sortBy="#{cliente.complemento}">
+					<h:outputText value="#{cliente.complemento}" />
+				</p:column>
+
+				<p:column headerText="Tel." sortBy="#{cliente.telefone}">
+					<h:outputText value="#{cliente.telefone}" />
+				</p:column>
+
+				<p:column headerText="Celular" sortBy="#{cliente.celular}">
+					<h:outputText value="#{cliente.celular}" />
+				</p:column>
+
+				<p:column headerText="E-mail" sortBy="#{cliente.email}">
+					<h:outputText value="#{cliente.email}" />
+				</p:column>
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{clienteBean.excluir}"
+						update=":mensagem :formListagem:tabela">
+						<p:confirm header="Confirmação" message="Deseja excluir o Livro?"
+							icon="ui-icon-alert" />
+						<f:attribute name="clienteSelecionado" value="#{cliente}" />
+					</p:commandButton>
+					
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{clienteBean.editar}"
+						update=":formCadastro:painel"
+						oncomplete="PF('dialogo').show();">
+						<f:attribute name="clienteSelecionado" value="#{cliente}" />
+					</p:commandButton>
+					
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</h:form>
+
+
+
+
+	<p:dialog header="Cliente - Cadastro" widgetVar="dialogo"
+		draggable="false" resizable="false" modal="true" closable="false">
+		<h:form id="formCadastro">
+
+
+			<h:panelGrid id="painel" columns="2">
+
+				<p:outputLabel for="nome" value="Nome:" />
+				<p:inputText id="nome" maxlength="50" size="30"
+					value="#{clienteBean.cliente.nome}" required="true"
+					requiredMessage="O campo 'Nome' é obrigatório" />
+
+				<p:outputLabel for="rg" value="RG:" />
+				<p:inputMask id="rg" mask="9.999.999" size="10"
+					value="#{clienteBean.cliente.rg}" required="true"
+					requiredMessage="O campo 'RG' é obrigatório" />
+
+				<p:outputLabel for="cpf" value="CPF:" />
+				<p:inputMask id="cpf" mask="999.999.999-99" size="10"
+					value="#{clienteBean.cliente.cpf}" required="true"
+					requiredMessage="O campo 'CPF' é obrigatório" />
+
+
+
+				<p:outputLabel for="rua" value="Rua:" />
+				<p:inputText id="rua" maxlength="100" size="50"
+					value="#{clienteBean.cliente.rua}" required="true"
+					requiredMessage="O campo 'Rua' é obrigatório" />
+
+				<p:outputLabel value="Número" />
+				<p:inputText maxlength="5" size="10"
+					value="#{clienteBean.cliente.numero}" required="true"
+					requiredMessage="O campo 'Número' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Número'"
+					validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+					<f:validateLongRange minimum="1" maximum="32767" />
+				</p:inputText>
+
+				<p:outputLabel for="bairro" value="Bairro:" />
+				<p:inputText id="bairro" maxlength="30" size="20"
+					value="#{clienteBean.cliente.bairro}" required="true"
+					requiredMessage="O campo 'Bairro' é obrigatório" />
+
+				<p:outputLabel for="cep" value="CEP:" />
+				<p:inputMask id="cep" mask="99.999-999" size="10"
+					value="#{clienteBean.cliente.cep}" required="true"
+					requiredMessage="O campo 'CEP' é obrigatório" />
+
+				<p:outputLabel for="complemento" value="Complemento:" />
+				<p:inputText id="complemento" maxlength="10" size="10"
+					value="#{clienteBean.cliente.complemento}" />
+
+				<p:outputLabel for="telefone" value="Telefone:" />
+				<p:inputMask id="telefone" mask="(99)9999-9999" size="15"
+					value="#{clienteBean.cliente.telefone}" required="true"
+					requiredMessage="O campo 'Telefone' é obrigatório" />
+
+				<p:outputLabel for="celular" value="Celular:" />
+				<p:inputMask id="celular" mask="(99)99999-9999" size="15"
+					value="#{clienteBean.cliente.celular}" required="true"
+					requiredMessage="O campo 'Celular' é obrigatório" />
+
+				<p:outputLabel for="email" value="Email:" />
+				<p:inputText id="email" maxlength="100" size="50"
+					value="#{clienteBean.cliente.email}" required="true"
+					requiredMessage="O campo 'Email' é obrigatório" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar"
+					actionListener="#{clienteBean.salvar}"
+					update=":mensagem :formCadastro:painel :formListagem:tabela" />
+				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

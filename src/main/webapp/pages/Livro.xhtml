@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/pages/modelo.xhtml">
+
+	<ui:define name="conteudo">
+
+	<h:form id="formListagem">
+		<p:panel header="Livros - Listagem">
+			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
+				paginator="true" value="#{livroBean.livros}" var="livro"
+				rows="10">
+				<f:facet name="header">
+
+					<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+						actionListener="#{livroBean.novo}" update=":formCadastro:painel" />
+
+				</f:facet>
+				
+				<p:column headerText="Qtd">
+					<h:outputText value="#{livro.quantidade}" />
+				</p:column>
+				
+
+				<p:column headerText="Título" sortBy="#{livro.nome_livro}">
+					<h:outputText value="#{livro.nome_livro}" />
+				</p:column>
+
+				<p:column headerText="Autor" sortBy="#{livro.autor}">
+					<h:outputText value="#{livro.autor}" />
+				</p:column>
+
+				<p:column headerText="Editora" sortBy="#{livro.editora}">
+					<h:outputText value="#{livro.editora}" />
+				</p:column>
+
+
+				<p:column headerText="Edição" sortBy="#{livro.edicao}">
+					<h:outputText value="#{livro.edicao}" />
+				</p:column>
+
+				<p:column headerText="Ano Pub." sortBy="#{livro.ano_publicacao}">
+					<h:outputText value="#{livro.ano_publicacao}" />
+				</p:column>
+
+				<p:column headerText="Nº Pag." sortBy="#{livro.num_paginas}">
+					<h:outputText value="#{livro.num_paginas}" />
+				</p:column>
+
+				<p:column headerText="Idioma" sortBy="#{livro.idioma}">
+					<h:outputText value="#{livro.idioma}" />
+				</p:column>
+
+				<p:column headerText="Categ." sortBy="#{livro.categoria}">
+					<h:outputText value="#{livro.categoria}" />
+				</p:column>
+				
+				<p:column headerText="Preço">
+					<h:outputText value="R$ #{livro.preco}">
+						<f:convertNumber locale="pt_BR" minFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+
+				
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{livroBean.excluir}"
+						update=":mensagem :formListagem:tabela">
+						<p:confirm header="Confirmação" message="Deseja excluir o Livro?"
+							icon="ui-icon-alert" />
+						<f:attribute name="livroSelecionado" value="#{livro}" />
+					</p:commandButton>
+					
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{livroBean.editar}"
+						update=":formCadastro:painel"
+						oncomplete="PF('dialogo').show();">
+						<f:attribute name="livroSelecionado" value="#{livro}" />
+					</p:commandButton>
+					
+					
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</h:form>
+
+
+
+
+	<p:dialog header="Livro - Cadastro" widgetVar="dialogo"
+		draggable="false" resizable="false" modal="true" closable="false">
+		<h:form id="formCadastro">
+
+
+			<h:panelGrid id="painel" columns="2">
+			
+			<p:outputLabel for="quantidade" value="Quantidade:" />
+				<p:inputText id="quantidade" maxlength="5" size="10"
+					value="#{livroBean.livro.quantidade}" required="true"
+					requiredMessage="O campo 'Quantidade' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Quantidade'"
+					validatorMessage="Informe um valor entre 0 e 1000 para o campo 'Quantidade'">
+					<f:validateLongRange minimum="0" maximum="1000" />
+				</p:inputText>
+			
+
+				<p:outputLabel for="nome_livro" value="NomeLivro:" />
+				<p:inputText id="nome_livro" maxlength="50" size="30"
+					value="#{livroBean.livro.nome_livro}" required="true"
+					requiredMessage="O campo 'Nome do livro' é obrigatório" />
+
+				<p:outputLabel for="autor" value="Autor:" />
+				<p:inputText id="autor" maxlength="50" size="30"
+					value="#{livroBean.livro.autor}" required="true"
+					requiredMessage="O campo 'Autor' é obrigatório" />
+					
+					<p:outputLabel for="editora" value="Editora:" />
+				<p:inputText id="editora" maxlength="50" size="30"
+					value="#{livroBean.livro.editora}" required="true"
+					requiredMessage="O campo 'Editora' é obrigatório" />
+
+				<p:outputLabel for="edicao" value="Edição:" />
+				<p:inputText id="edicao" maxlength="5" size="10"
+					value="#{livroBean.livro.edicao}" required="true"
+					requiredMessage="O campo 'Edição' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Número'"
+					validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+					<f:validateLongRange minimum="1" maximum="32767" />
+				</p:inputText>
+				
+				<p:outputLabel for="ano_publicacao" value="AnoPublicação:" />
+				<p:inputText id="ano_publicacao" maxlength="5" size="10"
+					value="#{livroBean.livro.ano_publicacao}" required="true"
+					requiredMessage="O campo 'AnoPublicação' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Número'"
+					validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+					<f:validateLongRange minimum="1" maximum="32767" />
+				</p:inputText>
+				
+				<p:outputLabel for="num_paginas" value="NumeroPaginas:" />
+				<p:inputText id="num_paginas" maxlength="5" size="10"
+					value="#{livroBean.livro.num_paginas}" required="true"
+					requiredMessage="O campo 'NumeroPaginas' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Número'"
+					validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+					<f:validateLongRange minimum="1" maximum="32767" />
+				</p:inputText>
+
+				<p:outputLabel for="idioma" value="Idioma:" />
+				<p:inputText id="idioma" maxlength="50" size="30"
+					value="#{livroBean.livro.idioma}" required="true"
+					requiredMessage="O campo 'Idioma' é obrigatório" />
+				
+				<p:outputLabel for="categoria" value="Categoria:" />
+				<p:inputText id="categoria" maxlength="50" size="30"
+					value="#{livroBean.livro.categoria}" required="true"
+					requiredMessage="O campo 'Categoria' é obrigatório" />
+					
+					<p:outputLabel for="preco" value="Preço:" />
+				<p:inputText id="preco" maxlength="7" size="10"
+					value="#{livroBean.livro.preco}" required="true"
+					requiredMessage="O campo 'Preço' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Preço''"
+					validatorMessage="Informe um valor entre 0,01 e 9999,99 para o campo 'Preço'">
+					<f:validateDoubleRange minimum="0.01" maximum="9999.99" />
+					<f:convertNumber locale="pt_BR" minFractionDigits="2" />
+				</p:inputText>
+				
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar"
+					actionListener="#{livroBean.salvar}"
+					update=":mensagem :formCadastro:painel :formListagem:tabela" />
+				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
